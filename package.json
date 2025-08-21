@@ -1,7 +1,7 @@
 {
-  "name": "tools_api",
+  "name": "rss_api",
   "version": "1.0.3",
-  "description": "一个RSS订阅+友链API",
+  "description": "一个RSS订阅与友链API",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
