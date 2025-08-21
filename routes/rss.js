@@ -58,6 +58,19 @@ function sortByGmtDate(items, dateField = 'date', ascending = true) {
   });
 }
 
+// 新增：获取 favicon 并转为 base64
+async function getFaviconBase64(url) {
+  try {
+    const faviconUrl = await getFaviconPathFromHtml(url);
+    const response = await axios.get(faviconUrl, { responseType: 'arraybuffer', timeout: 5000 });
+    const contentType = response.headers['content-type'] || 'image/x-icon';
+    const base64 = Buffer.from(response.data, 'binary').toString('base64');
+    return `data:${contentType};base64,${base64}`;
+  } catch (error) {
+    // 获取失败返回空字符串
+    return '';
+  }
+}
 
 rssRouter.get("/rss", async (ctx) => {
   const { limit = 36 } = ctx.query;
@@ -73,12 +86,12 @@ rssRouter.get("/rss", async (ctx) => {
   const results = await Promise.allSettled(
     url_list.map(async url => {
       const feed = await parser.parseURL(url["rss"]);
-      // 获取站点favicon
-      let favicon = '';
+      // 获取站点favicon并转为base64
+      let faviconBase64 = '';
       try {
-        favicon = await getFaviconPathFromHtml(url["rss"]);
+        faviconBase64 = await getFaviconBase64(url["rss"]);
       } catch {
-        favicon = '';
+        faviconBase64 = '';
       }
       return feed.items.map(item => ({
         "title": item.title || '',
@@ -86,7 +99,7 @@ rssRouter.get("/rss", async (ctx) => {
         "date": item.pubDate ? formatDateToCST(item.pubDate) : '',
         "link": item.link || '',
         "domain": getDomainFromUrl(item.link || ''),
-        "image_ico": favicon,
+        "image_ico": faviconBase64,
         "content": item.contentSnippet
           ? item.contentSnippet.replace(/</g, '&lt;').replace(/>/g, '&gt;').substring(0, 200) + '...'
           : (item.content
