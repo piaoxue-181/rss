@@ -1,7 +1,7 @@
 <div align="center">
 <img alt="logo" height="120" src="./public/favicon.png" width="120"/>
-<h2>Tools API</h2>
-<p>一些有用的 API</p>
+<h2>RSS API</h2>
+<p>一个RSS订阅与友链API</p>
 </div>
 
 ## 总览
@@ -11,9 +11,9 @@
 > ❌ 无法使用
 
 | **功能** | **调用名称** | **状态** |
-| -------- | ------------ | -------- |
-| 站点状态 | status       | 🟢       |
-| 每日必应 | bing         | 🟢       |
+| --------- | ------------ | -------- |
+| RSS获取    | rss            | 🟢       |
+| Friend列表 | friend         | 🟢       |
 
 ## 部署
 
@@ -27,35 +27,17 @@ pnpm start
 
 ## 使用
 
-### 站点状态
-
-反代 `UptimeRobot` 以实现站点监控
+### RSS获取
 
 ```http
-POST https://example.com/status
+GET https://example.com/rss
 ```
 
-### 每日必应
+### Friend列表
 
-- 详细信息
-
-  ```http
-  GET https://example.com/bing
-  ```
-
-- 直接输出图片
-
-  ```http
-  GET https://example.com/bing/image/
-  ```
-
-- 支持参数
-  | **参数** | **默认** | **必填** | **说明** |
-  |--------|--------|--------|----------------------|
-  | width | 无 | 否 | 图宽度片 |
-  | height | 无 | 否 | 图片高度 |
-  | size | 1 | 否 | 获取的图片数量，最大为 8 |
-  | days | 0 | 否 | 获取的图片在历史记录中的索引，最大为 7 |
+```http
+GET https://example.com/friend
+```
 
 ### 持续添加中
 
